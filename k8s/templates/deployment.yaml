@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator-deployment
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestrator
+  template:
+    metadata:
+      labels:
+        app: orchestrator
+    spec:
+      containers:
+        - name: spring-container
+          image: 192.168.0.212:5555/spring-orchestrator:20240731-154156
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: orchestrator-logs
+              mountPath: {{ .Values.log.mountPath }}
+
+        - name: fluent-bit
+          image: 192.168.0.212:5555/fluent/fluent-bit
+          volumeMounts:
+            - name: orchestrator-fluent-config
+              mountPath: {{ .Values.fluentBit.volume.mountPath }}
+              subPath: {{ .Values.fluentBit.volume.subPath }}
+            - name: orchestrator-logs
+              mountPath: {{ .Values.log.mountPath }}
+
+      volumes:
+        - name: orchestrator-logs
+          persistentVolumeClaim:
+            claimName: orchestrator-logs-pvc
+        - name: orchestrator-fluent-config
+          configMap:
+            name: orchestrator-fluent-bit-config

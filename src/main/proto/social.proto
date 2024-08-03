@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc";
+option java_outer_classname = "SocialProto";
+
+package social;
+
+import "common.proto";
+
+service SocialService {
+    rpc FollowUser(FollowUserRequest) returns (common.Response);
+    rpc UnfollowUser(UnfollowRequest) returns (common.Response);
+    rpc GetFollowers(GetFollowersRequest) returns (common.Response);
+    rpc GetPosts(GetPostsRequest) returns (common.Response);
+    rpc GetPostById(GetPostByIdRequest) returns (common.Response);
+    rpc CreatePost (CreatePostRequest) returns (common.Response);
+    rpc UpdatePost (UpdatePostRequest) returns (common.Response);
+    rpc DeletePost (DeletePostRequest) returns (common.Response);
+    rpc IncrementPostViews (IncrementPostViewsRequest) returns (common.Response);
+    rpc IncrementPostLikes (IncrementPostLikesRequest) returns (common.Response);
+    rpc DecrementPostLikes (DecrementPostLikesRequest) returns (common.Response);
+    rpc CreateComment(CreateCommentRequest) returns (common.Response);
+    rpc UpdateComment(UpdateCommentRequest) returns (common.Response);
+    rpc DeleteComment(DeleteCommentRequest) returns (common.Response);
+    rpc IncrementCommentLikes(IncrementCommentLikesRequest) returns (common.Response);
+    rpc DecrementCommentLikes(DecrementCommentLikesRequest) returns (common.Response);
+    rpc CreateReply(CreateReplyRequest) returns (common.Response);
+    rpc GetUnreadFeedActivities(GetUnreadFeedActivitiesRequest) returns (common.Response);
+    rpc GetFeedActivities(GetFeedActivitiesRequest) returns (common.Response);
+    rpc MarkActivityAsRead(MarkActivityAsReadRequest) returns (common.Response);
+    rpc getLatestActivityForFollowees(GetLatestActivityRequest) returns (common.Response);
+    rpc SearchPosts(SearchPostsRequest) returns (common.Response);
+}
+
+message FollowUserRequest {
+    uint64 followerId = 1;
+    uint64 followeeId = 2;
+}
+
+message UnfollowRequest {
+    uint64 followerId = 1;
+    uint64 followeeId = 2;
+}
+
+message GetFollowersRequest {
+    uint64 userId = 1;
+}
+
+message GetPostByIdRequest {
+    uint64 postId = 1;
+}
+
+message GetPostsRequest {
+    uint32 page = 1;
+    uint32 pageSize = 2;
+}
+
+message SearchPostsRequest {
+    string keyword = 1;
+    uint32 page = 2;
+    uint32 pageSize = 3;
+}
+
+message CreatePostRequest {
+    uint64 userId = 1;
+    string title = 2;
+    string author = 3;
+    string accountName = 4;
+    string content = 5;
+    uint64 stockCode = 6;
+}
+
+message UpdatePostRequest {
+    uint64 postId = 1;
+    uint64 userId = 2;
+    string title = 3;
+    string content = 4;
+}
+
+message DeletePostRequest {
+    uint64 postId = 1;
+    uint64 userId = 2;
+}
+
+message IncrementPostViewsRequest {
+    uint64 postId = 1;
+}
+
+message IncrementPostLikesRequest {
+    uint64 postId = 1;
+    uint64 userId = 2;
+}
+
+message DecrementPostLikesRequest {
+    uint64 postId = 1;
+    uint64 userId = 2;
+}
+
+message CreateCommentRequest {
+    uint64 postId = 1;
+    uint64 userId = 2;
+    string content = 3;
+}
+
+message UpdateCommentRequest {
+    uint64 commentId = 1;
+    uint64 userId = 2;
+    string content = 3;
+}
+
+message DeleteCommentRequest {
+    uint64 commentId = 1;
+    uint64 userId = 2;
+}
+
+message IncrementCommentLikesRequest {
+    uint64 commentId = 1;
+    uint64 userId = 2;
+}
+
+message DecrementCommentLikesRequest {
+    uint64 commentId = 1;
+    uint64 userId = 2;
+}
+
+message CreateReplyRequest {
+    uint64 postId = 1;
+    uint64 userId = 2;
+    uint64 parentCommentId = 3;
+    string content = 4;
+}
+
+message GetUnreadFeedActivitiesRequest {
+    uint64 userId = 1;
+    uint32 page = 2;
+    uint32 pageSize = 3;
+}
+
+message GetFeedActivitiesRequest {
+    uint64 userId = 1;
+    uint32 page = 2;
+    uint32 pageSize = 3;
+}
+
+message MarkActivityAsReadRequest {
+    uint64 activityId = 1;
+}
+
+message GetLatestActivityRequest {
+    int64 user_id = 1;
+}
